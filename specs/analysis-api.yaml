@@ -1,0 +1,267 @@
+swagger: '2.0'
+info:
+  title: iReceptorPlus Analysis API
+  version: 1.0.0
+  contact:
+    name: iReceptor Plus
+    url: 'https://www.ireceptor-plus.com'
+    email: info@ireceptor-plus.com
+  description: >
+    Analysis API for the iReceptor Plus platform.
+basePath: /irplus/v1/analysis
+
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/x-www-form-urlencoded
+  - application/json
+tags:
+  - name: info
+    description: Service information
+  - name: clones
+    description: Analysis API for clones
+  - name: rearrangements
+    description: Analysis API for rearrangements
+
+paths:
+  /:
+    x-swagger-router-controller: status
+    get:
+      description: |
+        Service heartbeat.
+      consumes:
+        - application/octet-stream
+      operationId: getStatus
+      responses:
+        '200':
+          description: |
+            Success.
+          schema:
+            type: object
+            properties:
+              result:
+                type: string
+
+  /info:
+    x-swagger-router-controller: status
+    get:
+      description: |
+        Service information.
+      tags:
+        - info
+      consumes:
+        - application/octet-stream
+      operationId: getInfo
+      responses:
+        '200':
+          description: |
+            Success.
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              version:
+                type: string
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+
+  /data/{analysis_id}:
+    x-swagger-router-controller: data
+    get:
+      description: >
+        Returns the output data from an analysis.
+      consumes:
+        - application/x-www-form-urlencoded
+        - application/json
+        - application/octet-stream
+      produces:
+        - application/json
+      parameters:
+        - name: analysis_id
+          in: path
+          description: ID of the analysis
+          required: true
+          type: string
+      operationId: getAnalysisData
+      responses:
+        '200':
+          description: |
+            A successful call returns the analysis data.
+
+  /rearrangement/junction/length:
+    x-swagger-router-controller: rearrangement
+    post:
+      description: >
+        Create a junction length distribution analysis for a rearrangement query.
+      tags:
+        - rearrangements
+      parameters:
+        - in: body
+          name: data
+          schema:
+            type: object
+            properties:
+              rearrangement_query_id:
+                type: string
+      operationId: createJunctionLengthDistribution
+      responses:
+        '200':
+          description: >
+            A successful call returns an analysis id.
+
+  /rearrangement/gene_usage:
+    x-swagger-router-controller: rearrangement
+    post:
+      description: >
+        Create a gene usage analysis for a rearrangement query.
+      tags:
+        - rearrangements
+      parameters:
+        - in: body
+          name: data
+          schema:
+            type: object
+            properties:
+              rearrangement_query_id:
+                type: string
+      operationId: createGeneUsage
+      responses:
+        '200':
+          description: >
+            A successful call returns an analysis id.
+
+  /rearrangement/diversity:
+    x-swagger-router-controller: rearrangement
+    post:
+      description: >
+        Create a diversity analysis for a rearrangement query.
+      tags:
+        - rearrangements
+      parameters:
+        - in: body
+          name: data
+          schema:
+            type: object
+            properties:
+              rearrangement_query_id:
+                type: string
+              diversity_method:
+                type: string
+      operationId: createDiversity
+      responses:
+        '200':
+          description: >
+            A successful call returns an analysis id.
+
+  /rearrangement/define_clones:
+    x-swagger-router-controller: rearrangement
+    post:
+      description: >
+        Create a define clones analysis for a rearrangement query.
+      tags:
+        - rearrangements
+      parameters:
+        - in: body
+          name: data
+          schema:
+            type: object
+            properties:
+              rearrangement_query_id:
+                type: string
+      operationId: createDefineClones
+      responses:
+        '200':
+          description: >
+            A successful call returns an analysis id.
+
+  /clone/lineage:
+    x-swagger-router-controller: clone
+    post:
+      description: >
+        Create a lineage tree analysis for a clone query.
+      tags:
+        - clones
+      parameters:
+        - in: body
+          name: data
+          schema:
+            type: object
+            properties:
+              clone_id:
+                type: string
+              lineage_method:
+                type: string
+      operationId: createLineageTree
+      responses:
+        '200':
+          description: >
+            A successful call returns an analysis id.
+
+  /clone/junction/length:
+    x-swagger-router-controller: clone
+    post:
+      description: >
+        Create a junction length distribution analysis for a clone query.
+      tags:
+        - clones
+      parameters:
+        - in: body
+          name: data
+          schema:
+            type: object
+            properties:
+              rearrangement_query_id:
+                type: string
+      operationId: createJunctionLengthDistribution
+      responses:
+        '200':
+          description: >
+            A successful call returns an analysis id.
+
+  /clone/gene_usage:
+    x-swagger-router-controller: clone
+    post:
+      description: >
+        Create a gene usage analysis for a clone query.
+      tags:
+        - clones
+      parameters:
+        - in: body
+          name: data
+          schema:
+            type: object
+            properties:
+              rearrangement_query_id:
+                type: string
+      operationId: createGeneUsage
+      responses:
+        '200':
+          description: >
+            A successful call returns an analysis id.
+
+  /clone/diversity:
+    x-swagger-router-controller: clone
+    post:
+      description: >
+        Create a diversity analysis for a clone query.
+      tags:
+        - clones
+      parameters:
+        - in: body
+          name: data
+          schema:
+            type: object
+            properties:
+              clone_query_id:
+                type: string
+              diversity_method:
+                type: string
+      operationId: createDiversity
+      responses:
+        '200':
+          description: >
+            A successful call returns an analysis id.
